@@ -2,6 +2,8 @@ import sys
 import getopt
 import copy
 import unittest
+import os.path
+import shutil
 
 class bcolors:
     HEADER = '\033[95m'
@@ -12,6 +14,9 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+
+HLINE = '-------------------------------------------------------------------'
 
 """A simple exception: when reaching the end of the file and a closing
    brace has not been found
@@ -277,7 +282,7 @@ class PointInFile() :
     def printHighlight(keyword, p_start, p_end, subs=False):
         p1 = PointInFile.copyConstructor(p_start)
         p2 = PointInFile.copyConstructor(p_end)
-        print '----------------------------------'
+        print HLINE
         print '@'+str(p1)
         output = p1.getSnippetBefore()
         output += bcolors.OKBLUE + keyword + '{'
@@ -295,7 +300,7 @@ class PointInFile() :
         
         output += p2.getSnippetAfter()
         print output
-        print '----------------------------------'
+        print HLINE + '\n'
 
 
 class TestPointInFile(unittest.TestCase) :
@@ -473,18 +478,50 @@ def reject_substituted(p_start, i) :
 
 
 InputFunctions = {
-    'a' : { 0 : accept_added, 1 : reject_added,   2: accept_substituted},
-    'r' : { 0 : reject_added, 1 : accept_added,   2: reject_substituted},
-    's' : { 0 : skipping,     1 : skipping,       2: skipping}
+    'A' : { 0 : accept_added, 1 : reject_added,   2: accept_substituted},
+    'R' : { 0 : reject_added, 1 : accept_added,   2: reject_substituted},
+    'S' : { 0 : skipping,     1 : skipping,       2: skipping}
 }
 
 
+def print_help() :
+    print "Accepts/rejects revisions from latex file"
+    print "Usage: accept_revision.py [options] <tex_file>"
+    print "    The script makes a copy of the file in backup_<tex file>_n," 
+    print "    where n is a progressime number. You can delete all previous "
+    print "    backup files with" 
+    print "         $ rm backup_*"
+    print "    You can use the following options: "
+    print "    -h   print this help"
+    print "    -a   all accept (non interactive)"
+    print "    -r   all reject (non interactive)"
+ 
+
+def make_backup(f) :
+    i = 1
+    while True:
+        fname = "backup_" + f + "_" + str(i)
+        if not os.path.exists(fname) :
+            shutil.copyfile(f, fname)
+            break
+        else :
+            i += 1
+
+    print 'I made a backup in', fname
+
+    return
+
+
 def main(argv=None) :
+
+    option_all = None
+    TEMP_FILE_NAME = '/tmp/accept-temp'
+
     if argv is None :
         argv = sys.argv
 
     try:
-        opts, args = getopt.getopt(argv[1:], "h", ["help"])
+        opts, args = getopt.getopt(argv[1:], "har", ["help", "accept", "reject"])
     except getopt.error, msg:
         print msg
         print "for help use --help"
@@ -492,14 +529,32 @@ def main(argv=None) :
     # process options
     for o, a in opts:
         if o in ("-h", "--help"):
-            print "Supprime accept/reject revisions from latex file"
+            print_help()
             sys.exit(0)
+        elif o in ("-a", "--accept"):
+            option_all = 'A'
+        elif o in ("-r", "--reject"):
+            option_all = 'R'
+
+    if not args[0] :
+        print_help()
+        sys.exit(0)
+
+    if not os.path.exists(args[0]) :
+        print "file", args[0], "not found"
+        sys.exit(0)
+
+    #make a backup
+    make_backup(args[0])
 
     myfile = open(args[0], 'r')
-    fout = open(args[0]+'_new.tex', 'w')
     
     p_curr = PointInFile(myfile.readlines(), 0, 0)
     p_old = PointInFile.copyConstructor(p_curr)
+
+    myfile.close();
+
+    fout = open(TEMP_FILE_NAME, 'w')
     
     while True:
         p_curr, i = p_curr.searchNextKeyword(klist)
@@ -511,32 +566,40 @@ def main(argv=None) :
         p_start.advance()
         p_end.advance()
         PointInFile.printHighlight(klist[i], p_curr, p_end, i==2)
-        c = raw_input('(A)ccept, (R)eject, (S)kip ?') 
+
+        if option_all : 
+            c = option_all
+        else :
+            c = raw_input('(A)ccept, (R)eject, (S)kip ?').capitalize() 
+
         out, p_new = InputFunctions[c][i](p_curr, i)
+
+        # writing result on file 
         fout.write(PointInFile.getSubString(p_old, p_curr))
         fout.write(out)
 
+        # writing result on screen
         newout = p_curr.getSnippetBefore()
         newout += bcolors.BOLD
         newout += out 
         newout += bcolors.ENDC
         newout += p_new.getSnippetAfter()
 
-        print '\n------ New text --------' 
+        print '\n' + HLINE
         print newout
-        print '------------------------\n\n'
+        print HLINE + '\n\n'
 
         p_old = PointInFile.copyConstructor(p_new)
         p_curr = p_new
-        # print '--- New p_curr = ' + str(p_curr)
 
-    # last piece
+    # writing the last piece on file
     fout.write(PointInFile.getSubString(p_old, p_curr))
+    fout.close()
 
+    print 'Overwriting file...'
+    shutil.copyfile(TEMP_FILE_NAME, args[0])
     print 'DONE'
-
     
-
 
 if __name__ == "__main__":
     # sys.exit(unittest.main())

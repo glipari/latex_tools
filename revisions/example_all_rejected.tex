@@ -1,7 +1,7 @@
 \documentclass{article}
 
 \title{Example of revisions}
-
+\author{Giuseppe Lipari\\\texttt{giuseppe.lipari@univ-lille1.fr}}
 \def\RevVersion{}
 \input{rev-macros}
 
@@ -33,8 +33,25 @@ read. In that case, you can eliminate all macros by running the
  script \texttt{accept\_revisions.py} passing the file
 as first argument. The script will search all every use of the macro
 in the file and propose you three choices: (a)ccept , (r)eject  and (s)kip
-. The output is recorded in a
+. 
+The output is recorded in a
 different file with the same name extended with \texttt{\_new.tex}.
+
+
+It also takes three possible options:
+
+\begin{itemize}
+\item \texttt{-h, --help} print the help 
+
+\item \texttt{-a, --accept} accept all changes
+  (non-interactive) 
+\item \texttt{-r, --reject} reject all changes (non-interactive)
+\end{itemize}
+The changes are written on a \texttt{/tmp/accept-temp} file and
+recopied on the original file before the script ends. If you press
+\texttt{Ctrl-C} before the script ends, the original file is not
+overwritten and the partial changes remain in
+\texttt{/tmp/accept-temp}.
 
 Enjoy it! 
 
