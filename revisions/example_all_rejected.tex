@@ -1,0 +1,48 @@
+\documentclass{article}
+
+\title{Example of revisions}
+
+\def\RevVersion{}
+\input{rev-macros}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+This is a simple example of use of the revision
+macros defined in \texttt{rev-macros.tex}. We want to delete this sentence.
+
+Of course, there are several ways to use this. There is the
+possibility to corrects typing errors; and also to add
+additional text later on; 
+
+Substitute is useful when we want to delete and add at the same
+time. We want to substitute this long and boring piece of
+  text that does not say anything interesting and may be safely
+  substitute with this shorter text.
+
+Notice that there is the possibility to show the revisions,  to show the
+old text,  or just show the new
+version .
+
+Finally, at some point the tex file usually becomes cluttered with
+added, substituted, deleted macros, and so it is difficult to be
+read. In that case, you can eliminate all macros by running the
+ script \texttt{accept\_revisions.py} passing the file
+as first argument. The script will search all every use of the macro
+in the file and propose you three choices: (a)ccept , (r)eject  and (s)kip
+. The output is recorded in a
+different file with the same name extended with \texttt{\_new.tex}.
+
+Enjoy it! 
+
+
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
