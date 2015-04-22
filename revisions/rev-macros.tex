@@ -1,0 +1,26 @@
+%\def\RevVersion{}
+%\def\OldVersion{}
+\ifdefined \RevVersion
+  \usepackage{soul}
+  \usepackage{color}
+  \usepackage{marginnote}
+  \newcommand{\added}[1]{{\color{blue} #1}}
+  \newcommand{\deleted}[1]{\st{#1}}
+  \setstcolor{blue}
+  \newcommand{\substituted}[2]{\st{#1}{\color{blue}#2}}
+\else 
+  \ifdefined \OldVersion
+    \newcommand{\added}[1]{}
+    \newcommand{\deleted}[1]{#1}
+    \newcommand{\substituted}[2]{#1}
+  \else
+    \newcommand{\added}[1]{#1}
+    \newcommand{\deleted}[1]{}
+    \newcommand{\substituted}[2]{#2}
+  \fi
+\fi
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
