@@ -1,0 +1,68 @@
+.bib_elem {
+    width : 80%;
+    margin: auto;
+    text-align: justify;
+    padding: 5px;
+}
+
+.bib_elem:hover {
+    background-color: #E0F8F1;
+}
+
+.bib_autor {
+    
+}
+
+.bib_key {
+    font-weight: bold;
+    text-align: right;
+    position: relative;
+    right: 101%;
+    /*display: inline;*/
+}
+
+.bib_title {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.bib_other {
+    display: none;
+    position: relative;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: grey;
+    padding: 20px;
+}
+
+.bib_abstract {
+    margin-top: 5px;
+    margin-bottom: 2px;
+    font-style: italic;
+}
+
+.bib_extra {
+    display: block;
+}
+
+.bib_doi {
+    display: inline;
+}
+
+.close_button {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.bib_journal_title {
+    border-bottom-style: solid;
+    border-bottom-color: grey;
+    border-bottom-width: 2px;
+}
+
+.bib_title_year {
+    border-bottom-style: dashed;
+    border-bottom-color: grey;
+    border-bottom-width: 1px;
+}

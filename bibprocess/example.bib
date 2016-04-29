@@ -1,0 +1,125 @@
+@inproceedings{Aldea2006,
+	abstract = {Scheduling theory generally assumes that real-time systems are mostly composed of activities with hard real-time requirements. Many systems are built today by composing different applications or components in the same system, leading to a mixture of many different kinds of requirements with small parts of the system having hard real-time requirements and other larger parts with requirements for more flexible scheduling and for quality of service. Hard real-time scheduling techniques are extremely pessimistic for the latter part of the application, and consequently it is necessary to use techniques that let the system resources be fully utilized to achieve the highest possible quality. This paper presents a framework for a scheduling architecture that provides the ability to compose several applications or components into the system, and to flexibly schedule the available resources while guaranteeing hard real-time requirements. The framework (called FSF) is independent of the underlying implementation, and can run on different underlying scheduling strategies. It is based on establishing service contracts that represent the complex and flexible requirements of the applications, and which are managed by the underlying system to provide the required level of service.},
+	author = {Aldea, M. and Bernat, Guillem and Broster, Ian and Burns, Alan and Dobrin, Radu and Drake, J. M. and Fohler, G. and Gai, Paolo and Harbour, M. G. and Guidi, Giacomo and Gutierrez, J. J. and Lennvall, Tomas and Lipari, Giuseppe and Martinez, J. M. and Medina, Julio L. and Palencia, J. C. and Trimarchi, Michael},
+	booktitle = {{Proc. 12th IEEE Real-Time and Embedded Technology and Applications Symp}},
+	date-added = {2011-05-12T00:00:00},
+	date-modified = {2014-11-05T08:09:39.345350},
+	doi = {10.1109/RTAS.2006.18},
+	owner = {lipari},
+	pages = {113--124},
+	title = {{FSF: A Real-Time Scheduling Architecture Framework}},
+	year = {2006}
+}
+
+@inproceedings{Anastasi2010,
+	abstract = {Software infrastructures for networked enterprises may need data coming from low-level pervasive devices, such as Wireless Sensor Networks (WSNs). However, the complex management of such tiny physical devices is not acceptable for high-level enterprise applications. Hence the need for a middleware layer that hides complexity and supports the management of heterogeneous real-time data coming from the environment. In our opinion, the Service Oriented Architecture (SOA) design paradigm is the most suitable for allowing a seamless and effective integration of pervasive technologies into enterprise information systems. In this paper we present a service-oriented, flexible and adaptable middleware that allows applications to configure WSN functionalities and exploit them in the form of Web Services.},
+	author = {Anastasi, Gaetano F. and Bini, Enrico and Romano, Antonio and Lipari, Giuseppe},
+	booktitle = {{Proc. IEEE Conf. Emerging Technologies and Factory Automation (ETFA)}},
+	date-added = {2011-05-12T00:00:00},
+	date-modified = {2014-11-05T08:09:39.563260},
+	doi = {10.1109/ETFA.2010.5641336},
+	owner = {lipari},
+	pages = {1--8},
+	title = {{A service-oriented architecture for QoS configuration and management of Wireless Sensor Networks}},
+	year = {2010}
+}
+
+@inproceedings{gai2001minimizing,
+	abstract = {The research on real-time software systems has produced algorithms that allow to effectively schedule system resources while guaranteeing the deadlines of the application and to group tasks in a very short number of non-preemptive sets which require much less RAM memory for stack. Unfortunately, up to now the research focus has been on time guarantees rather than the optimization of RAM usage. Furthermore, these techniques do not apply to multiprocessor architectures which are likely to be widely used in future microcontrollers. This paper presents a fast and simple algorithm for sharing resources in multiprocessor systems, together with an innovative procedure for assigning preemption thresholds to tasks. This allows to guarantee the schedulability of hard real-time task sets while minimizing RAM usage. The experimental part shows the effectiveness of a simulated annealing-based tool that allows to find a near-optimal task allocation. When used in conjunction with our preemption threshold assignment algorithm, our tool further reduces the RAM usage in multiprocessor systems.},
+	author = {Gai, Paolo and Lipari, Giuseppe and {Di Natale}, Marco},
+	booktitle = {{Proc. 22nd IEEE Real-Time Systems Symp. (RTSS 2001)}},
+	date-added = {2014-10-28T13:09:36.305420},
+	date-modified = {2014-11-05T08:16:09.966180},
+	doi = {10.1109/REAL.2001.990598},
+	localfile = {/home/lipari/Copy/Documents/mypapers/biblio/papers/2001_GaiLipariDiNatale_MSRP.pdf},
+	organization = {Published by the IEEE Computer Society},
+	pages = {73--83},
+	title = {{Minimizing memory utilization of real-time task sets in single and multi-processor systems-on-a-chip}},
+	year = {2001}
+}
+
+@inproceedings{conf/ecrts/LipariB03,
+	abstract = {When executing different real-time applications on a single processor system, one problem is how to compose these applications and guarantee at the same time that their timing requirements are not violated. A possible way of composing applications is through the resource reservation approach. Each application is handled by a dedicated server that is assigned a fraction of the processor. Using this approach, the system can be seen as a two-level hierarchical scheduler. A considerable amount of work has been recently addressed to the analysis of this kind of hierarchical systems. However, a question is still unanswered: given a set of real-time tasks to be handled by a server, how to assign the server parameters so that the task set is feasible? In this paper, we answer to the previous question for the case of fixed priority local scheduler by presenting a methodology for computing the class of server parameters that make the task set feasible.},
+	author = {Lipari, Giuseppe and Bini, Enrico},
+	booktitle = {{Proc. 15th Euromicro Conf. Real-Time Systems}},
+	date-added = {2014-10-28T13:09:30.986830},
+	date-modified = {2014-11-05T08:29:24.975140},
+	doi = {10.1109/EMRTS.2003.1212738},
+	link = {http://csdl.computer.org/comp/proceedings/ecrts/2003/1936/00/19360151abs.htm},
+	localfile = {/home/lipari/Copy/Documents/mypapers/biblio/papers/2003LipBin.pdf},
+	pages = {151--158},
+	publisher = {IEEE Computer Society},
+	title = {{Resource Partitioning among Real-Time Applications}},
+	year = {2003}
+}
+
+@inproceedings{conf/ecrts/LipariB00,
+	abstract = {A framework for scheduling a number of different applications on a single shared pre-emptable processor is proposed, such that each application seems to be executing on a slower dedicated processor. A tradeoff is identified and evaluated between how precise a notion of real time (as measured by the granularity of its clock) an application needs to have supported on the one hand, and the added context-switch costs imposed by our scheduling framework on the other},
+	author = {Lipari, Giuseppe and Baruah, Sanjoy K.},
+	booktitle = {{Proc. 12th Euromicro Conf. Real-Time Systems Euromicro RTS 2000}},
+	date-added = {2014-10-28T13:09:30.801880},
+	date-modified = {2014-11-05T08:23:59.604360},
+	doi = {10.1109/EMRTS.2000.854007},
+	organization = {IEEE},
+	pages = {193--200},
+	publisher = {IEEE Computer Society},
+	title = {{Greedy reclamation of unused bandwidth in constant-bandwidth servers}},
+	year = {2000}
+}
+
+@article{journals/jec/LipariB05,
+	author = {Lipari, Giuseppe and Bini, Enrico},
+	date-added = {2014-10-28T13:09:46.579300},
+	date-modified = {2014-11-05T08:11:53.228760},
+	issn = {1740-4460},
+	journal = {Journal of Embedded Computing},
+	link = {http://iospress.metapress.com/content/a60keb3bb9c9cptn/},
+	number = {2},
+	pages = {257--269},
+	publisher = {IOS Press},
+	title = {{A methodology for designing hierarchical scheduling systems}},
+	volume = {1},
+	year = {2005}
+}
+
+
+@article{journals/rts/PellizzoniL05,
+	author = {Pellizzoni, Rodolfo and Lipari, Giuseppe},
+	date-added = {2014-10-28T13:09:47.795030},
+	date-modified = {2014-11-05T08:13:29.256350},
+	journal = {Real-Time Systems},
+	number = {1-2},
+	pages = {105--128},
+	publisher = {Springer},
+	title = {{Feasibility Analysis of Real-Time Periodic Tasks with Offsets}},
+	volume = {30},
+	year = {2005}
+}
+
+@article{lipari2003framework,
+	author = {Lipari, Giuseppe and Bini, Enrico and Folher, G.},
+	date-added = {2014-11-05T08:09:43.492720},
+	date-modified = {2014-11-05T08:09:43.492700},
+	journal = {Electronic Notes in Theoretical Computer Science},
+	number = {6},
+	pages = {133--146},
+	publisher = {Elsevier},
+	title = {{A framework for composing real-time schedulers}},
+	volume = {82},
+	year = {2003}
+}
+
+@article{lipari2004task,
+	abstract = {In this paper, we present the BandWidth Inheritance (BWI) protocol, a new strategy for scheduling real-time tasks in dynamic systems, which extends the resource reservation framework to systems where tasks can interact through shared resources. The proposed protocol provides temporal isolation between independent groups of tasks and enables a schedulability analysis for guaranteeing the performance of hard real-time tasks. We show that BWI is the natural extension of the well-known priority inheritance protocol to dynamic reservation systems. A formal analysis of the protocol is presented and a guarantee test for hard real-time tasks is proposed that takes into account the case in which hard real-time tasks interact with soft real-time tasks.},
+	author = {Lipari, Giuseppe and Lamastra, Gerardo and Abeni, Luca},
+	date-added = {2014-10-28T13:09:46.941990},
+	date-modified = {2014-11-05T08:18:18.775030},
+	doi = {10.1109/TC.2004.120},
+	journal = {IEEE Transactions on Computers},
+	number = {12},
+	pages = {1591--1601},
+	publisher = {Published by the IEEE Computer Society},
+	title = {{Task synchronization in reservation-based real-time systems}},
+	volume = {53},
+	year = {2004}
+}
