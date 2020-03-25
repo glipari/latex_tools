@@ -16,7 +16,7 @@ file *accepting* or *rejecting* the revisions. To do this step by
 step, run the script accept_revision.py.
 
 It takes as argument the tex file to transform.  As first thing, it
-makes a copy into `backup_<filename>_i`, where i is a progressie
+makes a copy into `backup_<filename>_i.tex`, where i is a progressive
 number. Therefore, if you run this script often on the same file, you
 get a lot of backups, that you can clean simply with
 
@@ -37,7 +37,13 @@ It also takes three possible options:
 - `-a, --accept` accept all changes (non-interactive)
 - `-r, --reject` reject all changes (non-interactive)
 
-The changes are written on a `/tmp/accept-temp` file and recopied on
+The changes are written on a `/tmp/accept-temp` file and copied on
 the original file before the script ends. If you press `Ctrl-C` before
 the script ends, the original file is not overwritten and the partial
 changes remain in `/tmp/accept-temp`. 
+
+
+## Changlog
+
+- 25 mars 2020: Now the script works in Python 3.6 or greater.
+

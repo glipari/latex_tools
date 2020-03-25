@@ -1,3 +1,9 @@
+#!/usr/bin/python
+
+#
+# NEEDS PYTHON 3 
+#
+
 import sys
 import getopt
 import copy
@@ -54,14 +60,14 @@ class PointInFile() :
             raise OutOfFile(self.line, self.column)
 
     def __str__(self):
-        return '(%d, %d)' % (self.line, self.column)
+        return '[%c] (%d, %d)' % (self.lines[self.line][self.column], self.line, self.column)
 
 
     @staticmethod
     def copyConstructor(instance) :
         all_lines = instance.lines
-        curr_line = copy.copy(instance.line)
-        curr_col = copy.copy(instance.column)
+        curr_line = copy.deepcopy(instance.line)
+        curr_col = copy.deepcopy(instance.column)
         return PointInFile(all_lines, curr_line, curr_col)
 
     """
@@ -88,27 +94,25 @@ class PointInFile() :
             return 1
 
     """
-    Given a list of points, returns the one tha comes first
+    Given a list of points, returns the one that comes first
     """
     @staticmethod
     def getMin(list_of_points) :
-        if len(list_of_points) == 1 :
-            return list_of_points[0]
-        else :
-            p1 = list_of_points[0]
-            p2 = PointInFile.getMin(list_of_points[1:])
-            if PointInFile.compare(p1, p2) <= 0 :
-                return p1
-            else:
-                return p2
+        pold = PointInFile(["***"], 0, 0)
+        pold.line = 10000000
+        i = 0
+        index = 0
+        for p in list_of_points :
+            if PointInFile.compare(p, pold) <= 0 :
+                pold = p
+                index = i
+            i += 1
+            
+        return pold, index
 
     @staticmethod
     def getMinIndex(list_of_points) :
-        p = PointInFile.getMin(list_of_points)
-        i=0
-        for j in list_of_points : 
-            if j == p : break
-            i += 1
+        p, i = PointInFile.getMin(list_of_points)
         return p, i
 
                 
@@ -199,27 +203,31 @@ class PointInFile() :
     """
     def searchFor(self, s) :
         p1 = PointInFile.copyConstructor(self)
-        # print 'POINT: ', p1
+        # print ('Searching for', s)
+        # print ('POINT: ', p1)
         while True :
-            # print p1
+            # print (p1)
             if p1.eof() :
+                # print ('search string not found')
                 return p1
             elif p1.lines[p1.line].find('\\newcommand') != -1 :
                 # print 'Found new command, moving to next line'
                 p1.moveToNextLine()
             elif p1.lines[p1.line].find(s, p1.column) == -1 :
-                # print 'search string ' + s + ' not found, moving to next'
+                # print ('search string ' + s + ' not found, moving to next')
                 p1.moveToNextLine()
             else :
-                # print 'search string ' + s + ' has been found!' 
                 c = p1.lines[p1.line].find(s, p1.column)
                 p1.column = c
+                # print ('search string', s, 'has been found at', p1) 
                 return p1
 
 
     def searchNextKeyword(self, klist) :
-        plist = map((lambda x : self.searchFor(x)), klist )
-        return PointInFile.getMinIndex(plist)
+        # print ("search next keyword")
+        plist = map((lambda x : self.searchFor(x)), klist)
+        x = PointInFile.getMinIndex(plist)
+        return x
                 
     """ 
     Returns the substring between two points in the file.
@@ -282,8 +290,8 @@ class PointInFile() :
     def printHighlight(keyword, p_start, p_end, subs=False):
         p1 = PointInFile.copyConstructor(p_start)
         p2 = PointInFile.copyConstructor(p_end)
-        print HLINE
-        print '@'+str(p1)
+        print (HLINE)
+        print ('@'+str(p1))
         output = p1.getSnippetBefore()
         output += bcolors.OKBLUE + keyword + '{'
         p1.column += len(keyword)
@@ -299,8 +307,8 @@ class PointInFile() :
             p2 = p3
         
         output += p2.getSnippetAfter()
-        print output
-        print HLINE + '\n'
+        print (output)
+        print (HLINE + '\n')
 
 
 class TestPointInFile(unittest.TestCase) :
@@ -349,8 +357,9 @@ class TestPointInFile(unittest.TestCase) :
         p1 = self.point.searchFor('\\added')
         p2 = self.point.searchFor('\\deleted')
         p3 = self.point.searchFor('\\substituted')
-        p = PointInFile.getMin([p1, p2, p3])
+        p, i = PointInFile.getMin([p1, p2, p3])
         self.assertEqual(p, p1)
+        self.assertEqual(i, 0)
         self.assertEqual(p.line, 3)
         p.advance()
         p.advance()
@@ -358,7 +367,7 @@ class TestPointInFile(unittest.TestCase) :
         p4 = p.searchFor('\\added')
         p5 = p.searchFor('\\deleted')
         p6 = p.searchFor('\\substituted')
-        p = PointInFile.getMin([p4, p5, p6])
+        p, i = PointInFile.getMin([p4, p5, p6])
         self.assertEqual(p, p4)
         self.assertEqual(p.line, 5)
         p.advance()
@@ -367,7 +376,7 @@ class TestPointInFile(unittest.TestCase) :
         p7 = p.searchFor('\\added')
         p8 = p.searchFor('\\deleted')
         p9 = p.searchFor('\\substituted')
-        p = PointInFile.getMin([p7, p8, p9])
+        p, i = PointInFile.getMin([p7, p8, p9])
         self.assertEqual(p, p8)
         self.assertEqual(p.line, 8)
         p.advance()
@@ -376,7 +385,7 @@ class TestPointInFile(unittest.TestCase) :
         p1 = p.searchFor('\\added')
         p2 = p.searchFor('\\deleted')
         p3 = p.searchFor('\\substituted')
-        p = PointInFile.getMin([p1, p2, p3])
+        p, i = PointInFile.getMin([p1, p2, p3])
         self.assertEqual(p, p1)
         self.assertEqual(p.line, 10)
         p.advance()
@@ -385,7 +394,7 @@ class TestPointInFile(unittest.TestCase) :
         p1 = p.searchFor('\\added')
         p2 = p.searchFor('\\deleted')
         p3 = p.searchFor('\\substituted')
-        p = PointInFile.getMin([p1, p2, p3])
+        p, i = PointInFile.getMin([p1, p2, p3])
         self.assertEqual(p, p2)
         self.assertEqual(p.line, 10)
         p.advance()
@@ -394,7 +403,7 @@ class TestPointInFile(unittest.TestCase) :
         p1 = p.searchFor('\\added')
         p2 = p.searchFor('\\deleted')
         p3 = p.searchFor('\\substituted')
-        p = PointInFile.getMin([p1, p2, p3])
+        p, i = PointInFile.getMin([p1, p2, p3])
         self.assertEqual(p, p3)
         self.assertEqual(p.line, 10)
 
@@ -411,6 +420,35 @@ class TestPointInFile(unittest.TestCase) :
         p, j = p.searchNextKeyword(klist)
         self.assertEqual(j, 0)
         self.assertEqual(p.line, 5)
+        p.column += len(klist[j])
+        flag, p = p.findBalanced()
+        self.assertTrue(flag)
+
+        p, j = p.searchNextKeyword(klist)
+        # print("p =", p, "j =", j)
+        self.assertEqual(p.line, 8)
+        self.assertEqual(j, 1)
+        p.column += len(klist[j])
+        flag, p = p.findBalanced()
+        self.assertTrue(flag)
+
+        p, j = p.searchNextKeyword(klist)
+        self.assertEqual(j, 0)
+        self.assertEqual(p.line, 10)
+        p.column += len(klist[j])
+        flag, p = p.findBalanced()
+        self.assertTrue(flag)
+
+        p, j = p.searchNextKeyword(klist)
+        self.assertEqual(j, 1)
+        self.assertEqual(p.line, 10)
+        p.column += len(klist[j])
+        flag, p = p.findBalanced()
+        self.assertTrue(flag)
+
+        p, j = p.searchNextKeyword(klist)
+        self.assertEqual(j, 2)
+        self.assertEqual(p.line, 10)
         p.column += len(klist[j])
         flag, p = p.findBalanced()
         self.assertTrue(flag)
@@ -485,29 +523,33 @@ InputFunctions = {
 
 
 def print_help() :
-    print "Accepts/rejects revisions from latex file"
-    print "Usage: accept_revision.py [options] <tex_file>"
-    print "    The script makes a copy of the file in backup_<tex file>_n," 
-    print "    where n is a progressime number. You can delete all previous "
-    print "    backup files with" 
-    print "         $ rm backup_*"
-    print "    You can use the following options: "
-    print "    -h   print this help"
-    print "    -a   all accept (non interactive)"
-    print "    -r   all reject (non interactive)"
+    print ("Accepts/rejects revisions from latex file")
+    print ("Usage: accept_revision.py [options] <tex_file>")
+    print ("    The script makes a copy of the file in backup_<tex file>_n,") 
+    print ("    where n is a progressime number. You can delete all previous ")
+    print ("    backup files with" )
+    print ("         $ rm backup_*")
+    print ("    You can use the following options: ")
+    print ("    -h   print this help")
+    print ("    -a   all accept (non interactive)")
+    print ("    -r   all reject (non interactive)")
  
 
 def make_backup(f) :
     i = 1
+    # Separate path from filename 
+    dn = os.path.dirname(f)
+    fn, ext = os.path.splitext(os.path.basename(f))
+    
     while True:
-        fname = "backup_" + f + "_" + str(i)
+        fname = dn + "/" + "backup_" + fn + "_" + str(i) + ext
         if not os.path.exists(fname) :
             shutil.copyfile(f, fname)
             break
         else :
             i += 1
 
-    print 'I made a backup in', fname
+    print ('I made a backup in', fname)
 
     return
 
@@ -522,9 +564,9 @@ def main(argv=None) :
 
     try:
         opts, args = getopt.getopt(argv[1:], "har", ["help", "accept", "reject"])
-    except getopt.error, msg:
-        print msg
-        print "for help use --help"
+    except getopt.error as msg:
+        print (msg)
+        print ("for help use --help")
         sys.exit(2)
     # process options
     for o, a in opts:
@@ -541,7 +583,7 @@ def main(argv=None) :
         sys.exit(0)
 
     if not os.path.exists(args[0]) :
-        print "file", args[0], "not found"
+        print ("file", args[0], "not found")
         sys.exit(0)
 
     #make a backup
@@ -563,6 +605,12 @@ def main(argv=None) :
         p_start = PointInFile.copyConstructor(p_curr)
         p_start.column += len(klist[i])
         flag, p_end = p_start.findBalanced()
+        if not flag :
+            print(klist[i])
+            print(p_start)
+            print("Cannot find balanced parenthesis")
+            sys.exit(-1)
+            
         p_start.advance()
         p_end.advance()
         PointInFile.printHighlight(klist[i], p_curr, p_end, i==2)
@@ -570,7 +618,7 @@ def main(argv=None) :
         if option_all : 
             c = option_all
         else :
-            c = raw_input('(A)ccept, (R)eject, (S)kip ?').capitalize() 
+            c = input("(A)ccept, (R)eject, (S)kip ?").capitalize()
 
         out, p_new = InputFunctions[c][i](p_curr, i)
 
@@ -585,9 +633,9 @@ def main(argv=None) :
         newout += bcolors.ENDC
         newout += p_new.getSnippetAfter()
 
-        print '\n' + HLINE
-        print newout
-        print HLINE + '\n\n'
+        print ('\n' + HLINE)
+        print (newout)
+        print (HLINE + '\n\n')
 
         p_old = PointInFile.copyConstructor(p_new)
         p_curr = p_new
@@ -596,11 +644,12 @@ def main(argv=None) :
     fout.write(PointInFile.getSubString(p_old, p_curr))
     fout.close()
 
-    print 'Overwriting file...'
+    print ('Overwriting file...')
     shutil.copyfile(TEMP_FILE_NAME, args[0])
-    print 'DONE'
+    print ('DONE')
     
 
 if __name__ == "__main__":
     # sys.exit(unittest.main())
+    assert (sys.version_info >= (3, 6))
     sys.exit(main())
